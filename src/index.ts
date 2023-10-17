@@ -3,7 +3,7 @@ import "dotenv/config";
 import { Worker } from "worker_threads";
 import path from "path";
 
-const runQueryInWorker = async (queryType: string, stock: string) => {
+const runQueryInWorker = async (queryType: string, data: any) => {
   return new Promise((resolve, reject) => {
     const workerFilePath = path.resolve(
       __dirname,
@@ -21,21 +21,19 @@ const runQueryInWorker = async (queryType: string, stock: string) => {
       reject(error);
     });
 
-    worker.postMessage({ queryType, stock });
+    worker.postMessage({ queryType, data });
   });
 };
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const onEventTriggered = async (stock: string) => {
+const onEventTriggered = async (data: any) => {
   try {
     const results = await Promise.all([
-      runQueryInWorker("stockQuote", stock),
-      runQueryInWorker("stockNews", stock),
-      runQueryInWorker("companyStockOverview", stock),
-      runQueryInWorker("companyIncomeStatement", stock),
-      runQueryInWorker("companyCashFlow", stock),
-      runQueryInWorker("companyBalanceSheet", stock),
+      runQueryInWorker("stockQuote", data),
+      runQueryInWorker("stockNews", data),
+      runQueryInWorker("companyStockOverview", data),
+      runQueryInWorker("companyIncomeStatement", data),
+      runQueryInWorker("companyCashFlow", data),
+      runQueryInWorker("companyBalanceSheet", data),
     ]);
 
     console.log(results);
@@ -44,5 +42,8 @@ const onEventTriggered = async (stock: string) => {
   }
 };
 
-const stockTickerReceived = "AAPL";
+const stockTickerReceived = {
+  stock: "AAPL:NASDAQ",
+  period: "annual",
+};
 onEventTriggered(stockTickerReceived);

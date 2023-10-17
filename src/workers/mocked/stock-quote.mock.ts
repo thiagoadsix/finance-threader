@@ -1,0 +1,21 @@
+export default {
+  status: "OK",
+  request_id: "af1e2666-7807-401f-a622-8aba812efedd",
+  data: {
+    symbol: "AAPL:NASDAQ",
+    name: "Apple Inc",
+    type: "stock",
+    price: 151.29,
+    open: 152.305,
+    high: 152.7,
+    low: 149.97,
+    volume: 74829573,
+    previous_close: 150.72,
+    change: 0.57,
+    change_percent: 0.3782,
+    pre_or_post_market: 150.88,
+    pre_or_post_market_change: -0.41,
+    pre_or_post_market_change_percent: -0.271,
+    last_update_utc: "2022-11-19 01:00:00",
+  },
+};
