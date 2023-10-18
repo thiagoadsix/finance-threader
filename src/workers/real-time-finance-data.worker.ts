@@ -10,7 +10,10 @@ import companyCashFlowMock from "./mocked/company-cash-flow.mock";
 import companyBalanceSheetMock from "./mocked/company-balance-sheet.mock";
 
 parentPort?.on("message", async (message) => {
-  console.log("Message from parent port", JSON.stringify(message));
+  console.log(
+    "Message from parent port (real time finance data worker)",
+    JSON.stringify(message)
+  );
 
   const realTimeFinanceData = new RealTimeFinanceData();
 
@@ -21,19 +24,19 @@ parentPort?.on("message", async (message) => {
       case "stockQuote":
         result =
           process.env.ENV === "development"
-            ? stockQuoteMock
+            ? { from: message.queryType, ...stockQuoteMock }
             : await realTimeFinanceData.stockQuote(message.data.stock);
         break;
       case "stockNews":
         result =
           process.env.ENV === "development"
-            ? stockNewsMock
+            ? { from: message.queryType, ...stockNewsMock }
             : await realTimeFinanceData.stockNews(message.data.stock);
         break;
       case "companyStockOverview":
         result =
           process.env.ENV === "development"
-            ? companyStockOverviewMock
+            ? { from: message.queryType, ...companyStockOverviewMock }
             : await realTimeFinanceData.companyStockOverview(
                 message.data.stock
               );
@@ -41,7 +44,7 @@ parentPort?.on("message", async (message) => {
       case "companyIncomeStatement":
         result =
           process.env.ENV === "development"
-            ? companyIncomeStatementMock
+            ? { from: message.queryType, ...companyIncomeStatementMock }
             : realTimeFinanceData.companyIncomeStatement({
                 stock: message.data.stock,
                 period: message.data.period,
@@ -50,7 +53,7 @@ parentPort?.on("message", async (message) => {
       case "companyCashFlow":
         result =
           process.env.ENV === "development"
-            ? companyCashFlowMock
+            ? { from: message.queryType, ...companyCashFlowMock }
             : await realTimeFinanceData.companyCashFlow({
                 stock: message.data.stock,
                 period: message.data.period,
@@ -59,7 +62,7 @@ parentPort?.on("message", async (message) => {
       case "companyBalanceSheet":
         result =
           process.env.ENV === "development"
-            ? companyBalanceSheetMock
+            ? { from: message.queryType, ...companyBalanceSheetMock }
             : await realTimeFinanceData.companyBalanceSheet({
                 stock: message.data.stock,
                 period: message.data.period,
